@@ -54,10 +54,10 @@ class TemplateModel:
         seconds = duration / n
         for i in range(n):
             if chords[i] != curr_chord:
-                annotation.append((start*seconds, i*seconds, self.__get_chord_label(curr_chord)))
+                annotation.append((round(start*seconds,1), round(i*seconds,1), self.__get_chord_label(curr_chord)))
                 curr_chord = chords[i]
                 start = i
-        annotation.append((start*seconds, n*seconds, self.__get_chord_label(curr_chord)))
+        annotation.append((round(start*seconds,1), round(n*seconds,1), self.__get_chord_label(curr_chord)))
         return annotation
 
     def __predict_annotation(self, music_file):
@@ -72,13 +72,14 @@ class TemplateModel:
         for music_file in utils.get_music_files(folder):
             real_ann = utils.read_annotation(music_file)
             predicted_ann = self.__predict_annotation(music_file)
-            visualization.show_annotation(real_ann)
-            visualization.show_annotation(predicted_ann)
+            #visualization.show_annotation(real_ann)
+            #visualization.show_annotation(predicted_ann)
             metrics.append(visualization.calculate_accuracy(real_ann, predicted_ann))
         print('Accuracy:', np.mean(metrics))
 
     def predict(self, folder):
         for music_file in utils.get_music_files(folder):
             predicted_ann = self.__predict_annotation(music_file)
-            visualization.show_annotation(predicted_ann)
+            #visualization.show_annotation(predicted_ann)
+            print(f'{music_file}: {predicted_ann}')
     
